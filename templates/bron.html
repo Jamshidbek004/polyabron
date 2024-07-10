@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Polyabron Yaratish</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.13.18/jquery.timepicker.min.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            margin: 0 auto;
+            animation: fadeInUp 1s ease-in-out;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .error {
+            color: red;
+            margin-top: 5px;
+        }
+        .nav-links {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .nav-links a.btn {
+            margin: 0 10px;
+            font-weight: bold;
+        }
+        .btn-create {
+            background-color: #007bff; /* Blue */
+            border-color: #007bff;
+            color: #fff;
+        }
+        .btn-list {
+            background-color: #28a745; /* Green */
+            border-color: #28a745;
+            color: #fff;
+        }
+        .btn-available {
+            background-color: #dc3545; /* Red */
+            border-color: #dc3545;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container animate__animated animate__fadeInUp">
+        <div class="nav-links">
+            <a href="{% url 'list_polyabron' %}" class="btn btn-list">Bronlar Ro'yxati</a>
+            <a href="{% url 'bosh_vaqtlar' %}" class="btn btn-available">Bosh Vaqtlar</a>
+        </div>
+        <h1>Polyabron Yaratish</h1>
+        <form id="polyabronForm" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="ismfamilya">Ism va Familya:</label>
+                <input type="text" class="form-control" id="ismfamilya" name="ismfamilya" required>
+                {% if form.ismfamilya.errors %}
+                    <div class="error">{{ form.ismfamilya.errors }}</div>
+                {% endif %}
+            </div>
+            <div class="form-group">
+                <label for="jamo1">Jamo 1:</label>
+                <input type="text" class="form-control" id="jamo1" name="jamo1" required>
+                {% if form.jamo1.errors %}
+                    <div class="error">{{ form.jamo1.errors }}</div>
+                {% endif %}
+            </div>
+            <div class="form-group">
+                <label for="jamo2">Jamo 2:</label>
+                <input type="text" class="form-control" id="jamo2" name="jamo2" required>
+                {% if form.jamo2.errors %}
+                    <div class="error">{{ form.jamo2.errors }}</div>
+                {% endif %}
+            </div>
+            <div class="form-group">
+                <label for="kun">Kun:</label>
+                <input type="date" class="form-control" id="kun" name="kun" required>
+                <div id="date-error" class="error" style="display: none;">Sana bugundan oldin bo'lishi mumkin emas</div>
+                {% if form.kun.errors %}
+                    <div class="error">{{ form.kun.errors }}</div>
+                {% endif %}
+            </div>
+            <div class="form-group">
+                <label for="vaqti">Vaqti:</label>
+                <select class="form-control" id="vaqti" name="vaqti" required>
+                    {% for time in times %}
+                        <option value="{{ time.id }}">{{ time.vaqti }}</option>
+                    {% endfor %}
+                </select>
+                {% if form.vaqti.errors %}
+                    <div class="error">{{ form.vaqti.errors }}</div>
+                {% endif %}
+            </div>
+            <div class="form-group">
+                <label for="tel_raqam">Telefon Raqami:</label>
+                <input type="text" class="form-control" id="tel_raqam" name="tel_raqam" required>
+                {% if form.tel_raqam.errors %}
+                    <div class="error">{{ form.tel_raqam.errors }}</div>
+                {% endif %}
+            </div>
+            <div class="form-group">
+                <label for="tel_raqam2">Qo'shimcha Telefon Raqami:</label>
+                <input type="text" class="form-control" id="tel_raqam2" name="tel_raqam2" required>
+                {% if form.tel_raqam2.errors %}
+                    <div class="error">{{ form.tel_raqam2.errors }}</div>
+                {% endif %}
+            </div>
+            <div class="form-group">
+                <label for="izoh">Izoh:</label>
+                <textarea class="form-control" id="izoh" name="izoh" rows="3"></textarea>
+                {% if form.izoh.errors %}
+                    <div class="error">{{ form.izoh.errors }}</div>
+                {% endif %}
+            </div>
+            <button type="submit" class="btn btn-primary">Saqlash</button>
+        </form>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.13.18/jquery.timepicker.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Initialize Datepicker
+            $('#kun').datepicker({
+                format: 'yyyy-mm-dd',
+                autoclose: true,
+                todayHighlight: true
+            }).on('changeDate', function(e) {
+                const selectedDate = new Date(e.date);
+                const today = new Date();
+                today.setHours(0, 0, 0, 0); // Remove time part
+
+                if (selectedDate < today) {
+                    $('#date-error').show();
+                } else {
+                    $('#date-error').hide();
+                }
+            });
+
+            // Check initially selected date
+            const initialDate = new Date($('#kun').val());
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            if (initialDate < today) {
+                $('#date-error').show();
+            }
+
+            // Client-side validation for duplicate appointments
+            $('#kun, #vaqti').on('change', function() {
+                const kun = $('#kun').val();
+                const vaqti = $('#vaqti').val();
+
+                if (kun && vaqti) {
+                    $.ajax({
+                        url: "{% url 'check_availability' %}",
+                        data: {
+                            'kun': kun,
+                            'vaqti': vaqti
+                        },
+                        success: function(response) {
+                            $('.error').remove();  // Clear any previous errors
+                            if (response.is_taken) {
+                                $('#vaqti').after('<div class="error">Bu vaqt band etilgan</div>');
+                            }
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

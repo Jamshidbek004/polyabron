@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bosh Vaqtlar</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            padding: 20px;
+        }
+        .container {
+            margin-top: 20px;
+        }
+        .card {
+            margin-bottom: 20px;
+        }
+        .card-header {
+            background-color: #007bff;
+            color: #fff;
+        }
+        .nav-links {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .nav-links a.btn {
+            margin: 0 10px;
+            font-weight: bold;
+        }
+        .btn-create {
+            background-color: #28a745; /* Green */
+            border-color: #28a745;
+            color: #fff;
+        }
+        .btn-list {
+            background-color: #dc3545; /* Red */
+            border-color: #dc3545;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="nav-links">
+            <a href="{% url 'create_polyabron' %}" class="btn btn-create">Yangi Bron</a>
+            <a href="{% url 'list_polyabron' %}" class="btn btn-list">Bronlar Ro'yxati</a>
+        </div>
+        <h1 class="text-center">Bosh Vaqtlar</h1>
+        <div class="row">
+            {% if available_slots %}
+                {% for date, slots in available_slots.items %}
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                {{ date }}
+                            </div>
+                            <div class="card-body">
+                                {% if slots %}
+                                    <ul class="list-group">
+                                        {% for slot in slots %}
+                                            <li class="list-group-item">{{ slot.vaqti }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                {% else %}
+                                    <p class="card-text">Bosh vaqt topilmadi.</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="col-12">
+                    <div class="alert alert-info" role="alert">
+                        Bosh vaqt topilmadi.
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
